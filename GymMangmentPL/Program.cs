@@ -1,3 +1,6 @@
+using GymMangmentBLL;
+using GymMangmentBLL.Service.Classes;
+using GymMangmentBLL.Service.Interfaces;
 using GymMangmerDAL.Data.Context;
 using GymMangmerDAL.Data.DataSeeding;
 using GymMangmerDAL.Repositories.Classes;
@@ -22,6 +25,9 @@ namespace GymMangmentPL
             //builder.Services.AddScoped<IPlanRepository, PlanRepository>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<ISessionRepository, SessionRepository>();
+            builder.Services.AddAutoMapper(x => x.AddProfile(new MappingProfile()));
+            builder.Services.AddScoped<IAnalyticsService, AnalyticsService>();
+            builder.Services.AddScoped<IMemberService, MemberService>();
 
             var app = builder.Build();
             #region Data Seeding

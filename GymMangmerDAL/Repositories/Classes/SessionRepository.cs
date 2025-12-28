@@ -27,5 +27,11 @@ namespace GymMangmerDAL.Repositories.Classes
         {
             return  _dBContext.MemberSessions.Where(x=>x.SessionId==sessionId).Count();
         }
+
+        public Session? GetSessionWithTrainerAndCategory(int sessionId)
+        {
+            return _dBContext.Sessions.Include(x => x.SessionTrainer).Include(x => x.SessionCategory)
+                .FirstOrDefault(x=>x.Id==sessionId);
+        }
     }
 }
