@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace GymMangmentBLL.Service.Classes
 {
-    internal class PlanService : IPlanService
+    public class PlanService : IPlanService
     {
         private readonly IUnitOfWork _unitOfWork;
 

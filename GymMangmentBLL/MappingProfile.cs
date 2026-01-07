@@ -60,7 +60,9 @@ namespace GymMangmentBLL
                         .ForMember(dest => dest.TrainerName, opt => opt.MapFrom(src => src.SessionTrainer.Name))
                         .ForMember(dest => dest.AvailableSpots, opt => opt.Ignore()); // Will Be Calculated After Map
             CreateMap<UpdateSessionViewModel, Session>().ReverseMap();
-
+            CreateMap<Trainer, TrainerSelectViewModel>();
+            CreateMap<Category, CategorySelectViewModel>().ForMember(dest=>dest.Name,opt=>opt.MapFrom(src=>src.CategoryName));
+            
 
 
         }

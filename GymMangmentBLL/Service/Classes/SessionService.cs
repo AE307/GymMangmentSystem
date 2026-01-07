@@ -65,6 +65,18 @@ namespace GymMangmentBLL.Service.Classes
             //});
         }
 
+        public IEnumerable<TrainerSelectViewModel> GetTrainerForDropDown()
+        {
+           var trainer= _unitOfWork.GetRepository<Trainer>().GetAll();
+            return _mapper.Map<IEnumerable<TrainerSelectViewModel>>(trainer);
+        }
+
+        public IEnumerable<CategorySelectViewModel> GetCategoryForDropDown()
+        {
+            var category = _unitOfWork.GetRepository<Category>().GetAll();
+            return _mapper.Map<IEnumerable<CategorySelectViewModel>>(category);
+        }
+
         public SessionViewModel GetSessionById(int Sessionid)
         {
             var session = _unitOfWork.SessionRepository.GetSessionWithTrainerAndCategory(Sessionid);
@@ -164,7 +176,7 @@ namespace GymMangmentBLL.Service.Classes
             if (HasActiveBooking) return false;
             return true;
         }
-            
+
         #endregion
     }
 }

@@ -28,6 +28,8 @@ namespace GymMangmentPL
             builder.Services.AddAutoMapper(x => x.AddProfile(new MappingProfile()));
             builder.Services.AddScoped<IAnalyticsService, AnalyticsService>();
             builder.Services.AddScoped<IMemberService, MemberService>();
+            builder.Services.AddScoped<IPlanService, PlanService>();
+            builder.Services.AddScoped<ISessionService, SessionService>();
 
             var app = builder.Build();
             #region Data Seeding
