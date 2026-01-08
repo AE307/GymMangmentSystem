@@ -1,4 +1,6 @@
-﻿using GymMangmentBLL.Service.Interfaces;
+﻿using AutoMapper;
+using GymMangmentBLL.Service.Interfaces;
+using GymMangmentBLL.Service.Interfaces.AttachmentService;
 using GymMangmentBLL.ViewModels.MemberViewModel;
 using GymMangmerDAL.Entities;
 using GymMangmerDAL.Repositories.Interfaces;
@@ -15,10 +17,14 @@ namespace GymMangmentBLL.Service.Classes
     public class MemberService : IMemberService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        private readonly IAttachmentService _attachmentService;
 
-        public MemberService(IUnitOfWork unitOfWork)
+        public MemberService(IUnitOfWork unitOfWork,IMapper mapper ,IAttachmentService attachmentService)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
+            _attachmentService = attachmentService;
         }
 
 
@@ -26,32 +32,24 @@ namespace GymMangmentBLL.Service.Classes
         {
             try
             {
-                //check if email or phone already exists if one exists return false
-                if (IsEmailExists(createMember.Email) || IsPhoneExists(createMember.Phone)) return false;
-                var member = new Member()
-                {
-                    Name = createMember.Name,
-                    Email = createMember.Email,
-                    Phone = createMember.Phone,
-                    Gender = createMember.Gender,
-                    DateOfBirth = createMember.DateOfBirth,
-                    Address = new Address()
-                    {
-                        BuildingNumber = createMember.BuildingNumber,
-                        Street = createMember.Street,
-                        City = createMember.City
-                    },
-                    HealthRecord = new HealthRecord()
-                    {
-                        Height = createMember.HealthRecord.Height,
-                        Weight = createMember.HealthRecord.Weight,
-                        BloodType = createMember.HealthRecord.BloodType,
-                        Note = createMember.HealthRecord.Note
-                    }
-
-                };
+                if (IsEmailExists(createMember.Email) || IsPhoneExists(createMember.Phone))
+                    return false;
+                var photoName = _attachmentService.Upload("members", createMember.PhotoFile);
+                if (string.IsNullOrEmpty(photoName))
+                    return false;
+                var member= _mapper.Map<Member>(createMember);
+                member.photo = photoName;
                 _unitOfWork.GetRepository<Member>().Add(member);
-                return _unitOfWork.SaveChanges() > 0;
+                var Iscreated= _unitOfWork.SaveChanges() > 0;
+                if (!Iscreated)
+                {
+                    _attachmentService.Delete(photoName, "members");
+                    return false;
+                }
+                else
+                {
+                    return Iscreated;
+                }
             }
             catch (Exception)
             {
@@ -168,7 +166,11 @@ namespace GymMangmentBLL.Service.Classes
                     }
                 }
                 MemberRepo.Delete(Member);
-                return _unitOfWork.SaveChanges() > 0;
+                var IsDeleted= _unitOfWork.SaveChanges() > 0;
+                if (IsDeleted)
+                    _attachmentService.Delete(Member.photo, "members");
+                return IsDeleted;
+
             }
             catch (Exception)
             {

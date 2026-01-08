@@ -1,6 +1,8 @@
 using GymMangmentBLL;
 using GymMangmentBLL.Service.Classes;
+using GymMangmentBLL.Service.Classes.AttachmentService;
 using GymMangmentBLL.Service.Interfaces;
+using GymMangmentBLL.Service.Interfaces.AttachmentService;
 using GymMangmerDAL.Data.Context;
 using GymMangmerDAL.Data.DataSeeding;
 using GymMangmerDAL.Repositories.Classes;
@@ -30,6 +32,7 @@ namespace GymMangmentPL
             builder.Services.AddScoped<IMemberService, MemberService>();
             builder.Services.AddScoped<IPlanService, PlanService>();
             builder.Services.AddScoped<ISessionService, SessionService>();
+            builder.Services.AddScoped<IAttachmentService, AttachmentService>();
 
             var app = builder.Build();
             #region Data Seeding
