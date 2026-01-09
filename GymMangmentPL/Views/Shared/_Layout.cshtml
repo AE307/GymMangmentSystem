@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <!-- ^ Our main css file -->
     <link rel="stylesheet" href="~/css/style.css" />
-    <title>Power fitness | Home</title>
+    <title>Power fitness | @ViewData["Title"]</title>
 </head>
 <body>
     <header>
@@ -65,6 +65,14 @@
                                 Sessions
                                 Schedule
                             </a>
+                        </li>
+                        <li class="nav-item">
+                            <form asp-action="Logout" asp-controller="Account" method="post" class="d-inline">
+                                <button type="submit"
+                                        class="btn btn-link nav-link px-3 py-2 mx-2 fw-bolder fs-5 text-black-alternative">
+                                    Logout
+                                </button>
+                            </form>
                         </li>
                     </ul>
                 </div>
